@@ -89,8 +89,8 @@ const AddBrand = () => {
       {contextHolder}
       <PageHeader pageTitle="Add Brand" form="brand-form" btnText="Save" />
       <form id="brand-form" onSubmit={handleBrandSubmition}>
-        <div className="grid grid-cols-3 gap-5 mt-8 ">
-          <fieldset className=" bg-white p-[1.5rem] w-full  border col-span-2">
+        <div className="grid lg:grid-cols-3 gap-2 lg:gap-5 mt-8 ">
+          <fieldset className=" bg-white p-[1.5rem] w-full  border lg:col-span-2">
             <h2 className=" text-[1.125rem] mb-5 "> Basic Information</h2>
             <InputField
               name={"name"}

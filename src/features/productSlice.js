@@ -7,7 +7,7 @@ const initialProduct = {
   category_id: "",
   description: "",
   short_despcription: "",
-  quantity: 0,
+  quantity: "",
   isVisible: false,
   images: [],
   imageFiles: [],
@@ -17,56 +17,54 @@ const productSlice = createSlice({
   name: "product",
   initialState: initialProduct,
   reducers: {
-    setName: (state, action) => {
+    setProductName: (state, action) => {
       state.name = action.payload;
     },
-    setBrandId: (state, action) => {
+    setProduct_BrandId: (state, action) => {
       state.brand_id = action.payload;
     },
-    setCategoryId: (state, action) => {
+    setProduct_CategoryId: (state, action) => {
       state.category_id = action.payload;
     },
-    setPrice: (state, action) => {
-      state.price = action.payload;
+    setProductPrice: (state, action) => {
+      state.price = Number(action.payload);
     },
-    setDescription: (state, action) => {
+    setProductDescription: (state, action) => {
       state.description = action.payload;
     },
-    setShortDescription: (state, action) => {
+    setProductShortDescription: (state, action) => {
       state.short_despcription = action.payload;
     },
-    setQuntity: (state, action) => {
-      state.quantity = action.payload;
+    setProductQuntity: (state, action) => {
+      state.quantity = Number(action.payload);
     },
 
-    setVisibility: (state, action) => {
+    setProductVisibility: (state, action) => {
       state.isVisible = action.payload;
     },
-    setImages: (state, action) => {
+    setProductImages: (state, action) => {
       state.images = action.payload;
     },
-    setImageFiles: (state, action) => {
+    setProductImageFiles: (state, action) => {
       state.imageFiles = action.payload;
     },
 
-    reset: (state) => {
-      return {};
-    },
+    resetProduct: (state) => {},
   },
 });
 
 export const {
-  setName,
-  setPrice,
-  setBrandId,
-  setCategoryId,
-  setDescription,
-  setShortDescription,
-  setVisibility,
-  setImageFiles,
-  setImages,
-  setQuntity,
-  reset,
+  setProductName,
+  setProductPrice,
+  setProduct_BrandId,
+  setProduct_CategoryId,
+  setProductDescription,
+  setProductShortDescription,
+  setProductVisibility,
+  setProductImageFiles,
+  setProductImages,
+  setProductQuntity,
+  resetProduct,
 } = productSlice.actions;
 
 export default productSlice.reducer;

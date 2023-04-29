@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // upload
 import { PlusOutlined } from "@ant-design/icons";
@@ -9,7 +9,17 @@ import SelectCategory from "../components/SelectCategory";
 import SelectBrand from "../components/SelectBrand";
 import PageHeader from "../components/PageHeader";
 
+import {
+  setProductImages,
+  setProductImageFiles,
+} from "../features/productSlice";
+
+import { useSelector, useDispatch } from "react-redux";
+
 const AddProduct = () => {
+  const { images, imageFiles } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
+
   return (
     <>
       <PageHeader
@@ -17,12 +27,12 @@ const AddProduct = () => {
         form="add-product-form"
         btnText="Save"
       />
-      <div className="grid grid-cols-3 gap-5 mt-8">
-        <div className=" col-span-2 grid gap-5">
+      <div className="grid lg:grid-cols-3  gap-2 lg:gap-5 mt-8">
+        <div className=" lg:col-span-2 grid gap-2 lg:gap-5">
           <BasicProductInfo />
           <UploadView />
         </div>
-        <div className=" flex flex-col gap-5">
+        <div className=" flex flex-col gap-2 lg:gap-5">
           <Visibility />
           <SelectCategory />
           <SelectBrand />
@@ -41,6 +51,8 @@ const getBase64 = (file) =>
   });
 
 const UploadView = () => {
+  const dispatch = useDispatch();
+
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -58,7 +70,13 @@ const UploadView = () => {
     );
   };
 
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  const handleChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+    let filterList = newFileList.map((data) => data.originFileObj);
+    dispatch(setProductImageFiles(filterList));
+    console.log(filterList);
+  };
+  const beforeUpload = () => false;
 
   const uploadButton = (
     <div>
@@ -77,9 +95,9 @@ const UploadView = () => {
       <h2 className=" text-[1.125rem] mb-5"> Images</h2>
 
       <Upload
-        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
         listType="picture-card"
         fileList={fileList}
+        beforeUpload={beforeUpload}
         onPreview={handlePreview}
         onChange={handleChange}
       >

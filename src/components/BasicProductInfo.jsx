@@ -2,9 +2,39 @@ import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import InputField from "../components/InputField";
+import {
+  setProductName,
+  setProductPrice,
+  setProductQuntity,
+  setProductDescription,
+  setProductShortDescription,
+} from "../features/productSlice";
+
+import { useSelector, useDispatch } from "react-redux";
 
 const BasicProductInfo = () => {
   const [value, setValue] = useState("");
+  const { name, price, short_Description, description, quantity } = useSelector(
+    (state) => state.product
+  );
+  const dispatch = useDispatch();
+
+  const handleProductNameChange = ({ target }) => {
+    dispatch(setProductName(target.value));
+  };
+
+  const handleProductPriceChange = ({ target }) => {
+    dispatch(setProductPrice(target.value));
+  };
+  const handleProductQuantityChange = ({ target }) => {
+    dispatch(setProductQuntity(target.value));
+  };
+  const handleProductDescriptionChange = (content) => {
+    dispatch(setProductDescription(content));
+  };
+  const handleProductShortDesChange = ({ target }) => {
+    dispatch(setProductShortDescription(target.value));
+  };
 
   const options = [
     { value: "chocolate", label: "Chocolate" },
@@ -15,10 +45,20 @@ const BasicProductInfo = () => {
     <div className=" bg-white p-[1.5rem] w-full border">
       <h2 className=" text-[1.125rem] mb-5"> Basic Information</h2>
 
-      <InputField name="Name" />
+      <InputField name="Name" onChange={handleProductNameChange} value={name} />
       <div className="grid grid-cols-2 gap-4">
-        <InputField name="Price" type="number" />
-        <InputField name="Stock Quantity" type="number" />
+        <InputField
+          name="Price"
+          type="number"
+          value={price}
+          onChange={handleProductPriceChange}
+        />
+        <InputField
+          name="Stock Quantity"
+          type="number"
+          onChange={handleProductQuantityChange}
+          value={quantity}
+        />
       </div>
 
       <div>
@@ -27,8 +67,8 @@ const BasicProductInfo = () => {
         </p>
         <ReactQuill
           theme="snow"
-          value={value}
-          onChange={setValue}
+          value={description}
+          onChange={handleProductDescriptionChange}
           className="bg-white  "
         />
       </div>
@@ -37,6 +77,8 @@ const BasicProductInfo = () => {
       </p>
       <textarea
         name="short_description"
+        required
+        onChange={handleProductShortDesChange}
         className=" w-full h-[4rem] border border-gray-300"
       ></textarea>
     </div>

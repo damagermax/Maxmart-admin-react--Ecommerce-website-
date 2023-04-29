@@ -8,9 +8,10 @@ import { productDatabase } from "../services/productDb";
 
 export const store = configureStore({
   reducer: {
+    product: productReducer,
     brand: brandReducer,
     addCategory: addCategoryReducer,
-    product: productReducer,
+
     [categoryDatabase.reducerPath]: categoryDatabase.reducer,
     [brandDatabase.reducerPath]: brandDatabase.reducer,
     [productDatabase.reducerPath]: brandDatabase.reducer,

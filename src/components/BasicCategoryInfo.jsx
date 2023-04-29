@@ -45,7 +45,7 @@ function BasicCategoryInfo() {
   };
 
   return (
-    <div className="bg-white p-[1.5rem] w-full border col-span-2">
+    <div className="bg-white p-[1.5rem] w-full border lg:col-span-2">
       <h2 className="text-[1.125rem] mb-5">Basic Information</h2>
 
       <InputField name="Name" value={name} onChange={handleNameChange} />

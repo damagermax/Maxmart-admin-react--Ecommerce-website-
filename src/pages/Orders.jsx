@@ -150,6 +150,7 @@ const Orders = () => {
   return (
     <>
       <PageHeader pageTitle="Orders" />
+
       <div className=" bg-white py-[1.5rem] w-full h-screen border mt-4 text-2xl">
         <div className="pb-4 px-4">
           <Search size="large" />

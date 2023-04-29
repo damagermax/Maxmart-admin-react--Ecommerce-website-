@@ -6,9 +6,15 @@ import {
   getDocs,
   getDoc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db, storage } from "./firebaseCofig";
-import { uploadBytes, getDownloadURL, ref } from "firebase/storage";
+import {
+  uploadBytes,
+  getDownloadURL,
+  ref,
+  deleteObject,
+} from "firebase/storage";
 
 export const productDatabase = createApi({
   reducerPath: "productDatabase",
@@ -78,6 +84,23 @@ export const productDatabase = createApi({
           return { satus: "fulfied" };
         } catch (error) {
           return { error };
+        }
+      },
+    }),
+
+    deleteBrand: builder.mutation({
+      async queryFn(id) {
+        try {
+          await deleteDoc(doc(db, "brands", id));
+
+          const categoryImageRef = ref(storage, `brands/${id}.jpg`);
+          await deleteObject(categoryImageRef);
+
+          console.log("deleted ========== success", id);
+          return { satus: "fulfied" };
+        } catch (error) {
+          console.log(error);
+          return error;
         }
       },
     }),

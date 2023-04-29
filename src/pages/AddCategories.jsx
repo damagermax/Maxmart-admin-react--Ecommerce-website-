@@ -88,7 +88,10 @@ const AddCategories = () => {
       />
 
       <form id="add-category-form" onSubmit={onSubmit}>
-        <fieldset disabled="" className="grid grid-cols-3 gap-5 mt-8 ">
+        <fieldset
+          disabled=""
+          className="grid lg:grid-cols-3 gap-2 lg:gap-5 mt-8 "
+        >
           <BasicCategoryInfo />
 
           <Visibility
