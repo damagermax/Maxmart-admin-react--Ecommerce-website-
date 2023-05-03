@@ -49,7 +49,9 @@ const productSlice = createSlice({
       state.imageFiles = action.payload;
     },
 
-    resetProduct: (state) => {},
+    resetProduct: (state) => {
+      return { ...initialProduct };
+    },
   },
 });
 

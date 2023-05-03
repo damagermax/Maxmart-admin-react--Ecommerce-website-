@@ -1,6 +1,6 @@
 import React from "react";
 import StartCard from "..//components/StartCard";
-
+import PageHeader from "../components/PageHeader";
 import {
   FiClipboard,
   FiShoppingBag,
@@ -13,8 +13,9 @@ import OrderChart from "../components/OrderChart";
 
 const Dashboard = () => {
   return (
-    <div>
-      <div className=" grid lg:grid-cols-4 gap-3 sm:grid-cols-2 ">
+    <>
+      <PageHeader pageTitle="Dashboard" />
+      <div className=" grid lg:grid-cols-4 gap-2 lg:gap-3 sm:grid-cols-2 ">
         <StartCard
           color="bg-red-100 text-red-700"
           title="Tota Products"
@@ -45,11 +46,11 @@ const Dashboard = () => {
         </StartCard>
       </div>
 
-      <div className=" grid lg:grid-cols-4  gap-3 my-3 ">
+      <div className=" grid lg:grid-cols-4 grid-cols-1 gap-2 lg:gap-3 my-3 ">
         <OrderChart />
         <Sales />
       </div>
-    </div>
+    </>
   );
 };
 

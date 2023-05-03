@@ -5,18 +5,65 @@ import { TableStyles } from "../constants/Constants";
 import MoreOptions from "../components/MoreOptions";
 import PageHeader from "../components/PageHeader";
 import ImageWithPreview from "../components/ImageWithPreview";
+import {
+  useGetProductsQuery,
+  useDeleteProductMutation,
+} from "../services/productDb";
+import { useGetCategoriesQuery } from "../services/category";
+import StockStatus from "../components/StockStatus";
+import { Spin, message } from "antd";
 
 const PoductList = () => {
+  const { data: categories } = useGetCategoriesQuery();
+
+  const [
+    deleteProduct,
+    {
+      isLoading: isDeletingProduct,
+      isSuccess: isDeletingSuccess,
+      isError: isDeletingError,
+    },
+  ] = useDeleteProductMutation();
+
+  const { data, isLoading, isError } = useGetProductsQuery();
+
+  const getCategory = (category_id) => {
+    const category = categories?.filter(({ id }) => id.includes(category_id));
+
+    return category ? category[0]?.name : null;
+  };
+
+  const [messageApi, contextHolder] = message.useMessage();
+
+  useEffect(() => {
+    isDeletingSuccess &&
+      messageApi.open({
+        type: "success",
+        content: "item deleted successfully",
+      });
+
+    isDeletingError &&
+      messageApi.open({
+        type: "error",
+        content: "Something went wrong",
+      });
+  }, [isDeletingSuccess]);
+  const deleteProductItem = async (id) => {
+    await deleteProduct(id);
+  };
+
   const columns = useMemo(
     () => [
       {
         cell: (row) => (
           <div className="flex    py-3 gap-4">
-            <ImageWithPreview imageUrl={row.url} />
+            <ImageWithPreview imageUrl={row.images[0]} />
 
             <div>
               <p className=" line-clamp-1">{row.name}</p>
-              <p className=" text-[.7rem] text-gray-400 mt-1  ">ID: APPZ1038</p>
+              <p className=" text-[.7rem] text-gray-400 mt-1  ">
+                {"id: " + row.id}
+              </p>
             </div>
           </div>
         ),
@@ -28,109 +75,43 @@ const PoductList = () => {
       },
       {
         name: "Category",
-        selector: (row) => row.type,
+        selector: ({ category_id }) => getCategory(category_id),
         sortable: true,
         width: "150px",
       },
       {
         name: "Stock",
-        selector: (row) => row.calories,
-        sortable: true,
-        width: "100px",
-      },
-      {
-        name: "Price",
-        selector: (row) => row.fat,
+        cell: ({ quantity }) => <StockStatus quantity={quantity} />,
         sortable: true,
         width: "150px",
       },
+      {
+        name: "Price",
+        selector: ({ price }) => `$${price}`,
+        sortable: true,
+        width: "130px",
+      },
 
       {
-        cell: () => <MoreOptions />,
+        cell: ({ id }) => (
+          <MoreOptions
+            id={id}
+            editPath={"/editproduct"}
+            deleteItem={deleteProductItem}
+          />
+        ),
         ignoreRowClick: true,
         allowOverflow: true,
         button: true,
         width: "50px",
       },
     ],
-    []
+    [categories]
   );
 
-  const tableDataItems = [
-    {
-      name: "Sceptre IPS 24-Inch Business Computer Monitor",
-      type: "mango",
-      calories: 0,
-      fat: "$1,800.00",
-      url: "https://m.media-amazon.com/images/I/616nHsJfEZL.__AC_SY300_SX300_QL70_FMwebp_.jpg",
-    },
-    {
-      name: "Sceptre IPS 24-Inch Business Computer Monitor",
-      type: "mango",
-      calories: 0,
-      fat: "$1,800.00",
-      url: "https://m.media-amazon.com/images/I/616nHsJfEZL.__AC_SY300_SX300_QL70_FMwebp_.jpg",
-    },
-    {
-      name: "Sceptre IPS 24-Inch Business Computer Monitor",
-      type: "mango",
-      calories: 0,
-      fat: "$1,800.00",
-      url: "https://m.media-amazon.com/images/I/616nHsJfEZL.__AC_SY300_SX300_QL70_FMwebp_.jpg",
-    },
-    {
-      name: "2 Pack Compatible with 2022 MacBook Air 13.6 inch...",
-      type: "mango",
-      calories: 0,
-      fat: "$999988",
-      url: "https://images-na.ssl-images-amazon.com/images/I/71EM85dJFYL._AC_UL210_SR195,210_.jpg",
-    },
-    {
-      name: "Dell Inspiron 3910 Desktop Computer Tower ",
-      type: "mango",
-      calories: 0,
-      fat: 0,
-      url: "https://images-na.ssl-images-amazon.com/images/I/71ilwAO89yL._AC_UL127_SR127,127_.jpg",
-    },
-    {
-      name: "Apple AirPods Pro (2nd Generation) Wireless Earbuds",
-      type: "mango",
-      calories: 0,
-      fat: 0,
-      url: "https://images-na.ssl-images-amazon.com/images/I/61f1YfTkTDL._AC_UL127_SR127,127_.jpg",
-    },
-    {
-      name: "Sceptre IPS 24-Inch Business Computer Monitor",
-      type: "mango",
-      calories: 0,
-      fat: 0,
-      url: "https://m.media-amazon.com/images/I/616nHsJfEZL.__AC_SY300_SX300_QL70_FMwebp_.jpg",
-    },
-    {
-      name: "2 Pack Compatible with 2022 MacBook Air 13.6 inch...",
-      type: "mango",
-      calories: 0,
-      fat: 0,
-      url: "https://images-na.ssl-images-amazon.com/images/I/71EM85dJFYL._AC_UL210_SR195,210_.jpg",
-    },
-    {
-      name: "Dell Inspiron 3910 Desktop Computer Tower ",
-      type: "mango",
-      calories: 0,
-      fat: 0,
-      url: "https://images-na.ssl-images-amazon.com/images/I/71ilwAO89yL._AC_UL127_SR127,127_.jpg",
-    },
-    {
-      name: "Apple AirPods Pro (2nd Generation) Wireless Earbuds",
-      type: "mango",
-      calories: 0,
-      fat: 0,
-      url: "https://images-na.ssl-images-amazon.com/images/I/61f1YfTkTDL._AC_UL127_SR127,127_.jpg",
-    },
-  ];
-
   return (
-    <>
+    <Spin spinning={isDeletingProduct}>
+      {contextHolder}
       <PageHeader
         pageTitle="Products"
         path="/addproduct"
@@ -142,14 +123,17 @@ const PoductList = () => {
         </div>
         <hr />
         <DataTable
-          data={tableDataItems}
+          data={data}
+          paginationPerPage={12}
           columns={columns}
+          highlightOnHover
+          progressPending={isLoading}
           selectableRows
-          pagination
+          pagination={data ? data.length > 12 : false}
           customStyles={TableStyles}
         />
       </div>
-    </>
+    </Spin>
   );
 };
 

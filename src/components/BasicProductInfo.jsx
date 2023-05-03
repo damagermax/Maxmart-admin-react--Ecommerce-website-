@@ -9,11 +9,9 @@ import {
   setProductDescription,
   setProductShortDescription,
 } from "../features/productSlice";
-
 import { useSelector, useDispatch } from "react-redux";
 
 const BasicProductInfo = () => {
-  const [value, setValue] = useState("");
   const { name, price, short_Description, description, quantity } = useSelector(
     (state) => state.product
   );
@@ -78,6 +76,7 @@ const BasicProductInfo = () => {
       <textarea
         name="short_description"
         required
+        value={short_Description}
         onChange={handleProductShortDesChange}
         className=" w-full h-[4rem] border border-gray-300"
       ></textarea>

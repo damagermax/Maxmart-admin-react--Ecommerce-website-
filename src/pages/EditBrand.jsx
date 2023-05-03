@@ -102,8 +102,6 @@ const EditBrand = () => {
       return;
     }
     await updateBrand(newBrand);
-
-    console.log(newBrand);
   };
   return (
     <Spin spinning={isLoading}>

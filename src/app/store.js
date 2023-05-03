@@ -14,7 +14,7 @@ export const store = configureStore({
 
     [categoryDatabase.reducerPath]: categoryDatabase.reducer,
     [brandDatabase.reducerPath]: brandDatabase.reducer,
-    [productDatabase.reducerPath]: brandDatabase.reducer,
+    [productDatabase.reducerPath]: productDatabase.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>

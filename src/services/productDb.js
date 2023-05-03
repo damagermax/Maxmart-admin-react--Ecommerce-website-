@@ -1,4 +1,5 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
+import { nanoid } from "@reduxjs/toolkit";
 import {
   doc,
   setDoc,
@@ -14,6 +15,7 @@ import {
   getDownloadURL,
   ref,
   deleteObject,
+  listAll,
 } from "firebase/storage";
 
 export const productDatabase = createApi({
@@ -23,18 +25,26 @@ export const productDatabase = createApi({
     saveProduct: builder.mutation({
       async queryFn(data) {
         try {
-          const categoryImageRef = ref(storage, `products/${data?.id}.jpg`);
-          await uploadBytes(categoryImageRef, data?.imageUrl);
+          const imagePromises = Array.from(data?.images, async (image) => {
+            const imageName = image?.name + "_" + nanoid(4);
 
-          const downloadURL = await getDownloadURL(categoryImageRef);
+            const categoryImageRef = ref(
+              storage,
+              `products/${data?.id}/${imageName}`
+            );
+            await uploadBytes(categoryImageRef, image);
+            const downloadURL = await getDownloadURL(categoryImageRef);
+            return downloadURL;
+          });
+          const imageUrls = await Promise.all(imagePromises);
+
           await setDoc(doc(db, "products", data?.id), {
             ...data,
-            imageUrl: downloadURL,
+            images: imageUrls,
           });
 
           return { data: "ok" };
         } catch (error) {
-          console.log(error);
           return { error };
         }
       },
@@ -45,7 +55,7 @@ export const productDatabase = createApi({
         try {
           let categories = [];
 
-          const querySnapshot = await getDocs(collection(db, "product"));
+          const querySnapshot = await getDocs(collection(db, "products"));
           querySnapshot.forEach((doc) => {
             categories.push(doc.data());
           });
@@ -60,7 +70,7 @@ export const productDatabase = createApi({
     getProduct: builder.query({
       async queryFn(id) {
         try {
-          const docSnap = await getDoc(doc(db, "product", id));
+          const docSnap = await getDoc(doc(db, "products", id));
           if (docSnap.exists()) {
             console.log("Document data:", docSnap.data());
           } else {
@@ -79,7 +89,7 @@ export const productDatabase = createApi({
     updateProduct: builder.mutation({
       async quueryFn(id, newDate) {
         try {
-          await updateDoc(doc(db, "product", id), newDate);
+          await updateDoc(doc(db, "products", id), newDate);
 
           return { satus: "fulfied" };
         } catch (error) {
@@ -88,15 +98,20 @@ export const productDatabase = createApi({
       },
     }),
 
-    deleteBrand: builder.mutation({
+    deleteProduct: builder.mutation({
       async queryFn(id) {
         try {
-          await deleteDoc(doc(db, "brands", id));
+          await deleteDoc(doc(db, "products", id));
 
-          const categoryImageRef = ref(storage, `brands/${id}.jpg`);
-          await deleteObject(categoryImageRef);
+          const productImageRef = ref(storage, `products/${id}/`);
+          const files = await listAll(productImageRef);
 
-          console.log("deleted ========== success", id);
+          await Promise.all(
+            files.items.map(async (fileRef) => {
+              await deleteObject(fileRef);
+            })
+          );
+
           return { satus: "fulfied" };
         } catch (error) {
           console.log(error);
@@ -108,6 +123,7 @@ export const productDatabase = createApi({
 });
 
 export const {
+  useDeleteProductMutation,
   useSaveProductMutation,
   useGetProductsQuery,
   useUpdateProductMutation,

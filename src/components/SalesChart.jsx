@@ -4,35 +4,51 @@ import { Column } from "@ant-design/plots";
 const SalesChart = () => {
   const data = [
     {
-      type: "家具家电",
+      type: "JAN",
       sales: 38,
     },
     {
-      type: "粮油副食",
+      type: "FEB",
       sales: 52,
     },
     {
-      type: "生鲜水果",
+      type: "MAR",
       sales: 30,
     },
     {
-      type: "美容洗护",
+      type: "APR",
       sales: 1,
     },
     {
-      type: "母婴用品",
+      type: "MAY",
       sales: 4,
     },
     {
-      type: "进口食品",
+      type: "JUN",
       sales: 38,
     },
     {
-      type: "食品饮料",
+      type: "JUL",
       sales: 38,
     },
     {
-      type: "家庭清洁",
+      type: "AUG",
+      sales: 38,
+    },
+    {
+      type: "SEP",
+      sales: 38,
+    },
+    {
+      type: "OCT",
+      sales: 38,
+    },
+    {
+      type: "NUV",
+      sales: 38,
+    },
+    {
+      type: "DEC",
       sales: 38,
     },
   ];
@@ -60,7 +76,7 @@ const SalesChart = () => {
   };
 
   return (
-    <div className=" bg-white p-5 rounded-sm col-span-3 border flex flex-col  gap-10">
+    <div className=" bg-white p-5 rounded-sm lg:col-span-3 border flex flex-col  gap-10">
       <p className=" text-xs">Orders</p>
 
       <Column {...config} />

@@ -11,7 +11,8 @@ import {
 
 import { Layout, Menu } from "antd";
 import React, { useState } from "react";
-const { Header, Sider, Content } = Layout;
+
+const { Header, Content, Footer, Sider } = Layout;
 
 const MianLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -20,83 +21,73 @@ const MianLayout = () => {
 
   return (
     <Layout>
-      <div className=" hidden sm:block">
-        <Sider
-          trigger={null}
-          collapsible
-          collapsed={collapsed}
+      <Sider
+        breakpoint="lg"
+        collapsedWidth="0"
+        style={{
+          overflow: "auto",
+          height: "100vh",
+          position: "fixed",
+          left: 0,
+          top: 0,
+          bottom: 0,
+        }}
+      >
+        <div className="logo" />
+        <Menu
+          theme="dark"
+          mode="inline"
           style={{
-            overflow: "auto",
-            height: "100vh",
-            position: "sticky",
-            left: 0,
-            top: 0,
-            bottom: 0,
-            fontsize: "1px",
+            zoom: "85%",
           }}
-        >
-          <div className="logo" />
-          <Menu
-            theme="dark"
-            mode="inline"
-            style={{
-              zoom: "85%",
-            }}
-            defaultSelectedKeys={key}
-            onClick={({ key }) => {
-              navigate(key);
-            }}
-            items={[
-              {
-                key: "/",
-                icon: <UserOutlined />,
-                label: "Dasboard",
-              },
-              {
-                key: "catalog",
-                icon: <VideoCameraOutlined />,
-                label: "Catalog",
-                children: [
-                  {
-                    key: "categories",
-                    icon: <VideoCameraOutlined />,
-                    label: "Categories",
-                  },
-                  {
-                    key: "brands",
-                    icon: <VideoCameraOutlined />,
-                    label: "Brands",
-                  },
-
-                  {
-                    key: "productlist",
-                    icon: <VideoCameraOutlined />,
-                    label: "Products",
-                  },
-                ],
-              },
-              {
-                key: "orders",
-                icon: <UploadOutlined />,
-                label: "Orders",
-              },
-            ]}
-          />
-        </Sider>
-      </div>
-      <Layout className="site-layout">
-        <Header className=" shadow-sm  drop-shadow p-0 bg-white  z-10  sticky top-0 w-full">
-          {React.createElement(
-            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+          defaultSelectedKeys={key}
+          onClick={({ key }) => {
+            navigate(key);
+          }}
+          items={[
             {
-              className: "trigger",
-              onClick: () => setCollapsed(!collapsed),
-            }
-          )}
-        </Header>
-        <Content className=" bg-gray-100 p-[24px] zoom">
+              key: "/",
+              icon: <UserOutlined />,
+              label: "Dasboard",
+            },
+            {
+              key: "catalog",
+              icon: <VideoCameraOutlined />,
+              label: "Catalog",
+              children: [
+                {
+                  key: "categories",
+                  icon: <VideoCameraOutlined />,
+                  label: "Categories",
+                },
+                {
+                  key: "brands",
+                  icon: <VideoCameraOutlined />,
+                  label: "Brands",
+                },
+
+                {
+                  key: "productlist",
+                  icon: <VideoCameraOutlined />,
+                  label: "Products",
+                },
+              ],
+            },
+            {
+              key: "orders",
+              icon: <UploadOutlined />,
+              label: "Orders",
+            },
+          ]}
+        />
+      </Sider>
+      <Layout style={{ marginLeft: 200 }}>
+        <Content style={{ margin: "24px 16px 0" }}>
           <Outlet />
         </Content>
+        <Footer style={{ textAlign: "center" }}>
+          Ant Design ©2023 Created by Ant UED
+        </Footer>
       </Layout>
     </Layout>
   );
